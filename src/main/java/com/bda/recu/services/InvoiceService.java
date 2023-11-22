@@ -50,7 +50,7 @@ public class InvoiceService {
 
     public InvoiceDTO getById(int id){
         Optional<Invoice> entity = invoiceRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<InvoiceDTO> getAll(){

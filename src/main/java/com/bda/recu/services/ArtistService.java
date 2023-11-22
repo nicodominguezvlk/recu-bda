@@ -26,8 +26,8 @@ public class ArtistService {
         this.DTOmapper = DTOmapper;
     }
 
-    public ArtistDTO add(ArtistDTO entityDTO){
-        Optional<Artist> entity = Stream.of(entityDTO).map(entityMapper).findFirst();
+    public ArtistDTO add(ArtistDTO dto){
+        Optional<Artist> entity = Stream.of(dto).map(entityMapper).findFirst();
         entity.ifPresent(artistRepository::save);
         return entity.map(DTOmapper).orElseThrow();
     }
@@ -49,7 +49,7 @@ public class ArtistService {
 
     public ArtistDTO getById(int id){
         Optional<Artist> entity = artistRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<ArtistDTO> getAll(){

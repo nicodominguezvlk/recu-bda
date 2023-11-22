@@ -47,7 +47,7 @@ public class GenreService {
 
     public GenreDTO getById(int id){
         Optional<Genre> entity = genreRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<GenreDTO> getAll(){

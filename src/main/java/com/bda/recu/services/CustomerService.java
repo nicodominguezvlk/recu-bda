@@ -47,7 +47,7 @@ public class CustomerService {
 
     public CustomerDTO getById(int id){
         Optional<Customer> entity = customerRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<CustomerDTO> getAll(){

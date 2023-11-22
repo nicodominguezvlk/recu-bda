@@ -47,7 +47,7 @@ public class MediaTypeService {
 
     public MediaTypeDTO getById(int id){
         Optional<MediaType> entity = mediaTypeRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<MediaTypeDTO> getAll(){

@@ -47,7 +47,7 @@ public class InvoiceItemService {
 
     public InvoiceItemDTO getById(int id){
         Optional<InvoiceItem> entity = invoiceItemRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<InvoiceItemDTO> getAll(){

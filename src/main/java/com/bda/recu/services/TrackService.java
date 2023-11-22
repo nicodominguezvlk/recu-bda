@@ -47,7 +47,7 @@ public class TrackService {
 
     public TrackDTO getById(int id){
         Optional<Track> entity = trackRepository.findById(id);
-        return entity.map(DTOmapper).orElseThrow();
+        return entity.map(DTOmapper).orElse(null);
     }
 
     public List<TrackDTO> getAll(){
