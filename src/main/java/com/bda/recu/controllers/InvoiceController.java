@@ -1,5 +1,6 @@
 package com.bda.recu.controllers;
 
+import com.bda.recu.dtos.CondInvoiceDTO;
 import com.bda.recu.dtos.InvoiceDTO;
 import com.bda.recu.services.InvoiceService;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,11 @@ public class InvoiceController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/autobuy")
+    public ResponseEntity<InvoiceDTO> addCondInvoice(@RequestBody CondInvoiceDTO condInvoiceDTO){
+        InvoiceDTO createdDTO = invoiceService.addCondInvoice(condInvoiceDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDTO);
     }
 }

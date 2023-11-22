@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -54,7 +53,8 @@ class TrackServiceTest {
         trackRepository = Mockito.mock(TrackRepository.class);
         TrackMapper trackMapper = new TrackMapper(albumService, mediaTypeService, genreService);
         TrackDTOMapper trackDTOMapper = new TrackDTOMapper();
-        trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper);
+        FilteredTrackDTOMapper filteredTrackDTOMapper = new FilteredTrackDTOMapper();
+        trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService);
     }
 
     @Test

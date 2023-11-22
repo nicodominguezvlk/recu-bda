@@ -56,7 +56,8 @@ class PlaylistServiceTest {
         trackRepository = Mockito.mock(TrackRepository.class);
         TrackMapper trackMapper = new TrackMapper(albumService, mediaTypeService, genreService);
         TrackDTOMapper trackDTOMapper = new TrackDTOMapper();
-        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper);
+        FilteredTrackDTOMapper filteredTrackDTOMapper = new FilteredTrackDTOMapper();
+        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService);
 
         // Playlist
         playlistRepository = Mockito.mock(PlaylistRepository.class);

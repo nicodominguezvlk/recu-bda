@@ -1,14 +1,11 @@
 package com.bda.recu.services;
 
-import com.bda.recu.dtos.ArtistDTO;
 import com.bda.recu.dtos.InvoiceItemDTO;
-import com.bda.recu.dtos.TrackDTO;
 import com.bda.recu.models.*;
 import com.bda.recu.repos.*;
 import com.bda.recu.services.mappers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
@@ -73,13 +70,14 @@ class InvoiceItemServiceTest {
         trackRepository = Mockito.mock(TrackRepository.class);
         TrackMapper trackMapper = new TrackMapper(albumService, mediaTypeService, genreService);
         TrackDTOMapper trackDTOMapper = new TrackDTOMapper();
-        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper);
+        FilteredTrackDTOMapper filteredTrackDTOMapper = new FilteredTrackDTOMapper();
+        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService);
 
         // Invoice
         invoiceRepository = Mockito.mock(InvoiceRepository.class);
         InvoiceMapper invoiceMapper = new InvoiceMapper(customerService);
         InvoiceDTOMapper invoiceDTOMapper = new InvoiceDTOMapper();
-        InvoiceService invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper);
+        InvoiceService invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper, customerService, trackService, invoiceItemService, invoiceItemRepository, invoiceItemMapper);
 
         // InvoiceItem
         invoiceItemRepository = Mockito.mock(InvoiceItemRepository.class);

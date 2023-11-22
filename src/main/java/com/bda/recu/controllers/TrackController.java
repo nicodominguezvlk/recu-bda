@@ -1,5 +1,6 @@
 package com.bda.recu.controllers;
 
+import com.bda.recu.dtos.FilteredTrackDTO;
 import com.bda.recu.dtos.TrackDTO;
 import com.bda.recu.services.TrackService;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,13 @@ public class TrackController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/filtered")
+    public ResponseEntity<List<FilteredTrackDTO>> getAllWithArtist(
+            @RequestParam int artistId
+    ){
+        List<FilteredTrackDTO> values = this.trackService.getAllWithArtist(artistId);
+        return ResponseEntity.ok(values);
     }
 }
