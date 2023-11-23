@@ -48,10 +48,11 @@ public class TrackController {
     }
 
     @GetMapping("/filtered")
-    public ResponseEntity<List<FilteredTrackDTO>> getAllWithArtist(
-            @RequestParam int artistId
+    public ResponseEntity<List<FilteredTrackDTO>> getAllWithArtistAndMediaType(
+            @RequestParam int artistId,
+            @RequestParam int mediaTypeId
     ){
-        List<FilteredTrackDTO> values = this.trackService.getAllWithArtist(artistId);
+        List<FilteredTrackDTO> values = this.trackService.getAllWithArtistAndMediaType(artistId, mediaTypeId);
         return ResponseEntity.ok(values);
     }
 }

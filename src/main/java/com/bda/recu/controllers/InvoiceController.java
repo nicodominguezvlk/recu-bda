@@ -1,7 +1,9 @@
 package com.bda.recu.controllers;
 
-import com.bda.recu.dtos.CondInvoiceDTO;
+import com.bda.recu.dtos.InCondInvoiceDTO;
 import com.bda.recu.dtos.InvoiceDTO;
+import com.bda.recu.dtos.OutCondInvoiceDTO;
+import com.bda.recu.services.CondInvoiceService;
 import com.bda.recu.services.InvoiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.List;
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
+    private final CondInvoiceService condInvoiceService;
 
-    public InvoiceController(InvoiceService invoiceService) {
+    public InvoiceController(InvoiceService invoiceService, CondInvoiceService condInvoiceService) {
         this.invoiceService = invoiceService;
+        this.condInvoiceService = condInvoiceService;
     }
 
     @GetMapping
@@ -48,8 +52,9 @@ public class InvoiceController {
     }
 
     @PostMapping("/autobuy")
-    public ResponseEntity<InvoiceDTO> addCondInvoice(@RequestBody CondInvoiceDTO condInvoiceDTO){
-        InvoiceDTO createdDTO = invoiceService.addCondInvoice(condInvoiceDTO);
+    public ResponseEntity<OutCondInvoiceDTO> addCondInvoice(@RequestBody InCondInvoiceDTO condInvoiceDTO){
+        OutCondInvoiceDTO createdDTO = condInvoiceService.addCondInvoice(condInvoiceDTO);
+        // Se debe usar la version 3.41 del JDBC de SQLite (versiones posteriores no implementan el retorno del id despues de agregar una fila)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDTO);
     }
 }

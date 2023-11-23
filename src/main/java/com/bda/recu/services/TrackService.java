@@ -23,13 +23,15 @@ public class TrackService {
     private final TrackDTOMapper DTOmapper;
     private final FilteredTrackDTOMapper filteredDTOmapper;
     private final ArtistService artistService;
+    private final MediaTypeService mediaTypeService;
 
-    public TrackService(TrackRepository trackRepository, TrackMapper entityMapper, TrackDTOMapper DTOmapper, FilteredTrackDTOMapper filteredDTOmapper, ArtistService artistService) {
+    public TrackService(TrackRepository trackRepository, TrackMapper entityMapper, TrackDTOMapper DTOmapper, FilteredTrackDTOMapper filteredDTOmapper, ArtistService artistService, MediaTypeService mediaTypeService) {
         this.trackRepository = trackRepository;
         this.entityMapper = entityMapper;
         this.DTOmapper = DTOmapper;
         this.filteredDTOmapper = filteredDTOmapper;
         this.artistService = artistService;
+        this.mediaTypeService = mediaTypeService;
     }
 
     public TrackDTO add(TrackDTO entityDTO){
@@ -73,10 +75,10 @@ public class TrackService {
         return DTOmapper.apply(entity);
     }
 
-    public List<FilteredTrackDTO> getAllWithArtist(int artistId){
+    public List<FilteredTrackDTO> getAllWithArtistAndMediaType(int artistId, int mediaTypeId){
 
-        if (!artistService.existsById(artistId)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist not found");
+        if (!artistService.existsById(artistId) || !mediaTypeService.existsById(mediaTypeId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist or media type not found");
         }
 
         List<Track> entities = trackRepository.findAll();
@@ -84,10 +86,11 @@ public class TrackService {
         List<FilteredTrackDTO> filteredTrackDTOs = entities.stream()
                 .filter(track -> track.getAlbum() != null)
                 .filter(track -> track.getAlbum().getArtist().getArtistId() == artistId)
+                .filter(track -> track.getMediaType().getMediaTypeId() == mediaTypeId)
                 .map(filteredDTOmapper).toList();
 
         if (filteredTrackDTOs.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No tracks found for this artist");
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No tracks found for this artist and media type");
         }
 
         return filteredTrackDTOs;

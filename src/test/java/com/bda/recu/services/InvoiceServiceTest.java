@@ -43,7 +43,7 @@ class InvoiceServiceTest {
         invoiceRepository = Mockito.mock(InvoiceRepository.class);
         InvoiceMapper invoiceMapper = new InvoiceMapper(customerService);
         InvoiceDTOMapper invoiceDTOMapper = new InvoiceDTOMapper();
-        invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper, customerService, trackService, invoiceItemService, invoiceItemRepository, invoiceItemMapper);
+        invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper);
     }
 
     @Test

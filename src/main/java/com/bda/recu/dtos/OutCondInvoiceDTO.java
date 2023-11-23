@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FilteredTrackDTO {
-    private int trackId;
-    private String name;
-    private String albumName;
-    private int mediaTypeId;
+public class OutCondInvoiceDTO {
+    private CustomerDTO customer;
+    private double total;
     private int seconds;
-    private double unitPrice;
+    List<TrackDTO> trackList;
 }

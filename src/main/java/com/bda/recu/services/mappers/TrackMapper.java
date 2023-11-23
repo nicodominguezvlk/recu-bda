@@ -1,6 +1,7 @@
 package com.bda.recu.services.mappers;
 
 import com.bda.recu.dtos.TrackDTO;
+import com.bda.recu.models.Album;
 import com.bda.recu.models.Track;
 import com.bda.recu.services.AlbumService;
 import com.bda.recu.services.GenreService;
@@ -25,10 +26,18 @@ public class TrackMapper implements Function<TrackDTO, Track> {
 
     @Override
     public Track apply(TrackDTO trackDTO) {
+        Album album;
+        try{
+            album = albumService.map(albumService.getById(trackDTO.getAlbumId()));
+        }
+        catch (Exception e){
+            album = null;
+        }
+
         return new Track(
                 trackDTO.getTrackId(),
                 trackDTO.getName(),
-                albumService.map(albumService.getById(trackDTO.getAlbumId())),
+                album,
                 mediaTypeService.map(mediaTypeService.getById(trackDTO.getMediaTypeId())),
                 genreService.map(genreService.getById(trackDTO.getGenreId())),
                 trackDTO.getComposer(),

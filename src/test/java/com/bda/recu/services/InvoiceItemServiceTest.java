@@ -71,13 +71,13 @@ class InvoiceItemServiceTest {
         TrackMapper trackMapper = new TrackMapper(albumService, mediaTypeService, genreService);
         TrackDTOMapper trackDTOMapper = new TrackDTOMapper();
         FilteredTrackDTOMapper filteredTrackDTOMapper = new FilteredTrackDTOMapper();
-        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService);
+        TrackService trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService, mediaTypeService);
 
         // Invoice
         invoiceRepository = Mockito.mock(InvoiceRepository.class);
         InvoiceMapper invoiceMapper = new InvoiceMapper(customerService);
         InvoiceDTOMapper invoiceDTOMapper = new InvoiceDTOMapper();
-        InvoiceService invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper, customerService, trackService, invoiceItemService, invoiceItemRepository, invoiceItemMapper);
+        InvoiceService invoiceService = new InvoiceService(invoiceRepository, invoiceMapper, invoiceDTOMapper);
 
         // InvoiceItem
         invoiceItemRepository = Mockito.mock(InvoiceItemRepository.class);

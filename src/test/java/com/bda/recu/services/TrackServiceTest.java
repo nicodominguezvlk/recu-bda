@@ -54,7 +54,7 @@ class TrackServiceTest {
         TrackMapper trackMapper = new TrackMapper(albumService, mediaTypeService, genreService);
         TrackDTOMapper trackDTOMapper = new TrackDTOMapper();
         FilteredTrackDTOMapper filteredTrackDTOMapper = new FilteredTrackDTOMapper();
-        trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService);
+        trackService = new TrackService(trackRepository, trackMapper, trackDTOMapper, filteredTrackDTOMapper, artistService, mediaTypeService);
     }
 
     @Test

@@ -21,6 +21,7 @@ public class FilteredTrackDTOMapper implements Function<Track, FilteredTrackDTO>
                 track.getTrackId(),
                 track.getName(),
                 albumName,
+                track.getMediaType().getMediaTypeId(),
                 track.getMilliseconds() / 1000,
                 track.getUnitPrice()
         );
