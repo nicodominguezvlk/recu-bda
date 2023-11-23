@@ -3,7 +3,9 @@ package com.bda.recu.services;
 import com.bda.recu.dtos.*;
 import com.bda.recu.models.Invoice;
 import com.bda.recu.models.InvoiceItem;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,15 +19,24 @@ public class CondInvoiceService {
     private final InvoiceService invoiceService;
     private final InvoiceItemService invoiceItemService;
     private final TrackService trackService;
+    private final ArtistService artistService;
+    private final MediaTypeService mediaTypeService;
 
-    public CondInvoiceService(CustomerService customerService, InvoiceService invoiceService, InvoiceItemService invoiceItemService, TrackService trackService) {
+    public CondInvoiceService(CustomerService customerService, InvoiceService invoiceService, InvoiceItemService invoiceItemService, TrackService trackService, ArtistService artistService, MediaTypeService mediaTypeService) {
         this.customerService = customerService;
         this.invoiceService = invoiceService;
         this.invoiceItemService = invoiceItemService;
         this.trackService = trackService;
+        this.artistService = artistService;
+        this.mediaTypeService = mediaTypeService;
     }
 
     public OutCondInvoiceDTO addCondInvoice(InCondInvoiceDTO condInvoiceDTO){
+
+        // Check artist and media type
+        if (!artistService.existsById(condInvoiceDTO.getArtistId()) || !mediaTypeService.existsById(condInvoiceDTO.getMediaTypeId())){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         // Get customer
         CustomerDTO customerDTO = customerService.getById(condInvoiceDTO.getCustomerId());
@@ -75,6 +86,16 @@ public class CondInvoiceService {
                 .filter(t -> trackService.map(t).getAlbum().getArtist().getArtistId() == condInvoiceDTO.getArtistId())
                 .toList();
 
+        // Media type filtering
+        avTracks = avTracks.stream()
+                .filter(t -> trackService.map(t).getMediaType().getMediaTypeId() == condInvoiceDTO.getMediaTypeId())
+                .toList();
+
+        if (avTracks.isEmpty()){
+            invoiceService.delete(invoiceDTO.getInvoiceId());
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
+
         // At least one track per album
         List<TrackDTO> filtTracks = new ArrayList<>();
         List<Integer> albumIds = new ArrayList<>();
@@ -95,6 +116,7 @@ public class CondInvoiceService {
                 buyTracks.add(filtTracks.get(i));
             }
             else{
+                tot = tot - avTracks.get(i).getUnitPrice();
                 break;
             }
             i += 1;
@@ -106,8 +128,12 @@ public class CondInvoiceService {
                 if (!buyTracks.contains(avTracks.get(i))){
                     buyTracks.add(avTracks.get(i));
                 }
+                else {
+                    tot = tot - avTracks.get(j).getUnitPrice();
+                }
             }
             else{
+                tot = tot - avTracks.get(j).getUnitPrice();
                 break;
             }
             j += 1;
@@ -137,13 +163,12 @@ public class CondInvoiceService {
         }
 
         // Create out DTO structure
-        OutCondInvoiceDTO outDTO = new OutCondInvoiceDTO(
+
+        return new OutCondInvoiceDTO(
                 customerDTO,
                 tot,
                 seconds,
                 buyTracks
         );
-
-        return outDTO;
     }
 }
